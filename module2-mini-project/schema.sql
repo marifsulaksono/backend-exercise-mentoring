@@ -69,3 +69,10 @@ CREATE TABLE IF NOT EXISTS transaction_items (
     CONSTRAINT fk_ti_product FOREIGN KEY (product_id)
         REFERENCES products (id)
 );
+
+-- -------------------------------------------------------------
+--  INDEXES
+-- -------------------------------------------------------------
+CREATE INDEX idx_tr_customer_id ON transactions (customer_id);
+CREATE INDEX idx_ti_transaction_id ON transaction_items (transaction_id);
+CREATE INDEX idx_ti_product_id ON transaction_items (product_id);
