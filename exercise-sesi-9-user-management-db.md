@@ -92,23 +92,27 @@ Pilih menu:
 ### Fitur yang Harus Diimplementasikan
 
 #### 1. Lihat Daftar User
+
 - Ambil semua user dari database (`SELECT`)
 - Tampilkan dalam format tabel: ID, Nama, Email
 - Jika belum ada user, tampilkan pesan informatif
 
 #### 2. Detail User
+
 - Minta input ID user
 - Ambil satu user berdasarkan ID (`SELECT ... WHERE id = ?`)
 - Tampilkan seluruh data user tersebut
 - Jika ID tidak ditemukan, tampilkan pesan yang jelas
 
 #### 3. Tambah User
+
 - Minta input nama dan email
 - Validasi: nama dan email tidak boleh kosong
 - Simpan ke database (`INSERT`)
 - Tampilkan konfirmasi dengan ID yang baru dibuat
 
 #### 4. Update User
+
 - Minta input ID user yang ingin diubah
 - Pastikan user dengan ID tersebut ada — jika tidak, tampilkan error
 - Minta input nama dan email baru
@@ -116,6 +120,7 @@ Pilih menu:
 - Tampilkan konfirmasi perubahan
 
 #### 5. Hapus User
+
 - Minta input ID user yang ingin dihapus
 - Pastikan user dengan ID tersebut ada — jika tidak, tampilkan error
 - Hapus dari database (`DELETE ... WHERE id = ?`)
@@ -170,10 +175,10 @@ func openDB() (*gorm.DB, error) {
 
 ### Kapan Pakai Apa?
 
-| Fungsi | Kapan dipakai |
-|---|---|
-| `db.Raw("SELECT ...").Scan(&result)` | SELECT — tulis query sendiri, hasil di-scan ke struct atau slice |
-| `db.Exec("INSERT/UPDATE/DELETE ...")` | Operasi tulis — tidak mengembalikan baris data |
+| Fungsi                                | Kapan dipakai                                                    |
+| ------------------------------------- | ---------------------------------------------------------------- |
+| `db.Raw("SELECT ...").Scan(&result)`  | SELECT — tulis query sendiri, hasil di-scan ke struct atau slice |
+| `db.Exec("INSERT/UPDATE/DELETE ...")` | Operasi tulis — tidak mengembalikan baris data                   |
 
 > **Catatan:** GORM punya method seperti `.Find()`, `.First()`, `.Create()` yang bisa melakukan hal yang sama secara otomatis. Tapi di exercise ini, **utamakan `db.Raw` dan `db.Exec`** agar kamu benar-benar memahami SQL yang berjalan di baliknya.
 
