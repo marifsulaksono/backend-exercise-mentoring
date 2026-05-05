@@ -197,9 +197,13 @@ Kembalian    : Rp XX.XXX
 === LAPORAN PENJUALAN ===
   1. Ringkasan Hari Ini
   2. Produk Terlaris (Top 5)
-  3. Riwayat Transaksi
   0. Kembali
 ```
+
+**Keterangan laporan:**
+
+- **Ringkasan Hari Ini** — menampilkan total transaksi dan total pendapatan untuk hari ini (hanya transaksi berstatus `completed`)
+- **Produk Terlaris (Top 5)** — menampilkan 5 produk dengan qty terjual terbanyak **sepanjang waktu** (dari semua transaksi yang ada di database)
 
 ---
 
@@ -431,11 +435,10 @@ if err != nil {
 
 **`ReportHandler`** — query laporan diletakkan di `TransactionRepository`, handler hanya menampilkan hasilnya:
 
-| Method                     | Deskripsi                                                           |
-| -------------------------- | ------------------------------------------------------------------- |
-| `ShowDailySummary()`       | Jumlah transaksi & total pendapatan hari ini (status = `completed`) |
-| `ShowTopProducts()`        | 5 produk dengan qty terjual terbanyak (JOIN + GROUP BY)             |
-| `ShowRecentTransactions()` | 10 transaksi terakhir beserta nama customer                         |
+| Method               | Deskripsi                                                               |
+| -------------------- | ----------------------------------------------------------------------- |
+| `ShowDailySummary()` | Jumlah transaksi & total pendapatan hari ini (status = `completed`)     |
+| `ShowTopProducts()`  | 5 produk dengan qty terjual terbanyak sepanjang waktu (JOIN + GROUP BY) |
 
 ---
 
@@ -503,13 +506,8 @@ func main() {
 **Produk Terlaris:**
 
 - Gunakan `JOIN` antara `transaction_items` dan `products`
-- Gunakan `SUM(quantity)` dan `GROUP BY product_id` untuk menghitung total terjual per produk
+- Gunakan `SUM(quantity)` dan `GROUP BY product_id` untuk menghitung total terjual per produk **dari semua transaksi** (tidak perlu filter tanggal)
 - Urutkan dengan `ORDER BY ... DESC` dan batasi dengan `LIMIT 5`
-
-**Riwayat Transaksi Terakhir:**
-
-- Gunakan `JOIN` antara `transactions` dan `customers` untuk mendapatkan nama customer
-- Urutkan dengan `ORDER BY date DESC` dan batasi dengan `LIMIT ?`
 
 ### Alur Transaksi Baru
 
@@ -544,9 +542,8 @@ func main() {
 - [ ] **Transaksi baru** menyimpan data ke `transactions` dan `transaction_items`
 - [ ] Stok produk berkurang di database setelah transaksi selesai
 - [ ] Struk belanja ditampilkan dengan nama produk, qty, subtotal, total, bayar, kembalian
-- [ ] Menu **Ringkasan Hari Ini** menampilkan jumlah transaksi dan total pendapatan hari ini
-- [ ] Menu **Produk Terlaris** menampilkan 5 produk dengan qty terjual terbanyak (menggunakan `GROUP BY`)
-- [ ] Menu **Riwayat Transaksi** menampilkan 10 transaksi terakhir dengan nama customer (menggunakan `JOIN`)
+- [ ] Menu **Ringkasan Hari Ini** menampilkan jumlah transaksi dan total pendapatan hari ini (status `completed`)
+- [ ] Menu **Produk Terlaris** menampilkan 5 produk dengan qty terjual terbanyak sepanjang waktu (menggunakan `JOIN` + `GROUP BY`)
 
 ### Layered Architecture
 
@@ -570,6 +567,7 @@ func main() {
 > Tidak wajib. Kerjakan hanya setelah semua acceptance criteria terpenuhi.
 
 - [ ] **Update status transaksi:** Tambahkan fitur untuk mengubah status transaksi dari `waiting` → `paid` → `completed`
+- [ ] **Riwayat Transaksi:** Tampilkan 10 transaksi terakhir beserta nama customer (gunakan `JOIN` ke tabel `customers`)
 - [ ] **Laporan stok rendah:** Tampilkan produk dengan stok di bawah threshold tertentu (misal stok < 10)
 - [ ] **Cari customer:** Tambahkan fitur pencarian customer berdasarkan nama menggunakan `LIKE`
 - [ ] **Hapus produk dengan validasi:** Cegah penghapusan produk yang sudah pernah ada di `transaction_items`
